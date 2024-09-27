@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build BroBash Terminal",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "src/main.cpp",
+                "-o",
+                "brobash_terminal"
+            ],
+            "options": {
+                "shell": {
+                    "executable": "/bin/bash",
+                    "args": ["-c", "g++ src/main.cpp -o brobash_terminal $(pkg-config --cflags --libs gtk+-3.0)"]
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compiles the BroBash GTK terminal application."
+        },
+        {
+            "label": "Run BroBash Terminal",
+            "type": "shell",
+            "command": "./brobash_terminal",
+            "dependsOn": "Build BroBash Terminal",
+            "group": "test",
+            "problemMatcher": [],
+            "detail": "Runs the BroBash GTK terminal application."
+        }
+    ]
+}

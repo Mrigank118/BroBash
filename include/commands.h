@@ -1,3 +1,5 @@
+// commands.h
+
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
@@ -5,16 +7,16 @@
 
 // Declare Bhai Lang command functions
 std::string banaoCommand(const std::string& fileName);
-std::string  dikhaoCommand();
-std::string  mitaoCommand(const std::string& fileName);
-std::string trim(const std::string& str);
+std::string dikhaoCommand();
+std::string mitaoCommand(const std::string& fileName);
+
 // Command parser
 std::string parseBhaiLang(const std::string& input);
+std::string trim(const std::string& str);  // Declare trim function here
 
-// Declare getPrompt to be used elsewhere
+// Declarations for other commands
 std::string getPrompt();
-std::string mitaoCommand(const std::string& fileName);
-std::string puraniKahaniCommand();  // Bhai Lang command for history
-std::string aakhriCommand();  // Bhai Lang command for last command
+std::string puraniKahaniCommand();  
+std::string aakhriCommand();
 
 #endif

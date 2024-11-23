@@ -59,3 +59,7 @@ The BroBash terminal is a command-line interface (CLI) that functions similarly 
 
 ### Screenshot: 
 ![Terminal Image](/images/terminal.png)
+
+## Collaborators
+[![Mrigank118](https://img.shields.io/badge/Mrigank118-6DA55F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Mrigank118)
+[![Jainritikaa](https://img.shields.io/badge/Jainritikaa-6DA55F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Jainritikaa)

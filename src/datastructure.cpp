@@ -10,25 +10,20 @@
 
 using namespace std;
 
-// Constructor
 DirectoryTree::DirectoryTree() {
     char cwd[PATH_MAX];
     if (getcwd(cwd, sizeof(cwd)) != NULL) {
         root = new TreeNode("/");
-        currentPath = std::string(cwd);  // Set the current path to the working directory
+        currentPath = std::string(cwd);
         current = root;
-
-        // Populate the tree starting from the current working directory
         populateTree(root, currentPath);
     } else {
-        // Fallback in case getcwd fails
         root = new TreeNode("/");
         current = root;
         currentPath = "/";
     }
 }
 
-// Search for a file or directory
 std::string DirectoryTree::khojo(const std::string& target) {
     std::stack<TreeNode*> stack;
     stack.push(root);
@@ -37,9 +32,7 @@ std::string DirectoryTree::khojo(const std::string& target) {
         TreeNode* node = stack.top();
         stack.pop();
 
-        // Check if this node matches the target
         if (node->name == target) {
-            // Build the path to the target
             std::string path = "";
             TreeNode* temp = node;
             while (temp != nullptr) {
@@ -49,7 +42,6 @@ std::string DirectoryTree::khojo(const std::string& target) {
             return "Bhai! Mil gaya: " + path;
         }
 
-        // Add all children to the stack
         for (const auto& [childName, childNode] : node->children) {
             stack.push(childNode);
         }
@@ -58,11 +50,10 @@ std::string DirectoryTree::khojo(const std::string& target) {
     return "Bhai! Yeh nahi mila: " + target;
 }
 
-// Populate the tree with the directory structure
 void DirectoryTree::populateTree(TreeNode* node, const string& path) {
     DIR* dir = opendir(path.c_str());
     if (dir == NULL) {
-        return;  // Cannot open directory, exit
+        return;
     }
 
     struct dirent* entry;
@@ -88,10 +79,9 @@ std::string DirectoryTree::chalo(const std::string& dirName) {
         return wapas();
     }
 
-    // Check if the directory exists in the current node's children
     if (current->children.find(dirName) != current->children.end()) {
         current = current->children[dirName];
-        currentPath += "/" + dirName;  // Append the directory to the path
+        currentPath += "/" + dirName;
         return "Bhai! Tum ab " + getCurrentPath() + " mein ho!";
     } else {
         return "Bhai! Yeh directory nahi mil rahi: " + dirName;
@@ -102,12 +92,11 @@ std::string DirectoryTree::wapas() {
     if (current->parent != nullptr) {
         current = current->parent;
 
-        // Remove the last segment of the current path
         size_t pos = currentPath.find_last_of("/");
         currentPath = currentPath.substr(0, pos);
 
         if (currentPath.empty()) {
-            currentPath = "/";  // If we're at the root, set to "/"
+            currentPath = "/";
         }
         return "Bhai! Tum ek level upar ho! Ab tum " + getCurrentPath() + " mein ho!";
     } else {
@@ -141,12 +130,10 @@ std::string DirectoryTree::getCurrentPath() {
     return currentPath.empty() ? "/" : currentPath;
 }
 
-// Destructor to clean up memory
 DirectoryTree::~DirectoryTree() {
     deleteTree(root);
 }
 
-// Helper function to delete the tree
 void DirectoryTree::deleteTree(TreeNode* node) {
     for (auto& [name, child] : node->children) {
         deleteTree(child);

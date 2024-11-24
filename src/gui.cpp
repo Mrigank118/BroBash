@@ -1,29 +1,24 @@
-
 #include "gui.h"
 #include "linkedlist.h"  // Include the LinkedList header
-
 #include "commands.h"
 #include <gtk/gtk.h>
+#include "datastructure.h"
 #include <string>
 #include <iostream>
 #include <unistd.h>
 #include <limits.h>
 
 extern LinkedList commandHistory;
-GtkWidget *text_view; //FOR DISPLAYING TEXT
+extern DirectoryTree directoryTree;
+GtkWidget *text_view; // FOR DISPLAYING TEXT
 GtkTextBuffer *text_buffer;
-GtkTextTagTable *tag_table; //FOR COLOUR WEIGHT ETC
+GtkTextTagTable *tag_table; // FOR COLOUR, WEIGHT, ETC
 GtkTextTag *prompt_tag, *input_tag, *output_tag;
-
 // Function to get the current directory path (used as the prompt)
 std::string getPrompt() {
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        return std::string(cwd) + " > ";
-    } else {
-        return "~/ > ";
-    }
+    return directoryTree.getCurrentPath() + " > ";
 }
+
 
 // Function to initialize text tags for colors
 void initialize_text_tags() {
@@ -54,6 +49,7 @@ void append_output(const char* text, GtkTextTag* tag) {
     // Auto-scroll to the end of the text view
     gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(text_view), &iter, 0.0, TRUE, 0.0, 0.0);
 }
+
 gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
     if (event->keyval == GDK_KEY_Return) {
         GtkTextIter start, end;
@@ -106,38 +102,35 @@ gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
     }
 
     // Handle up and down arrow keys for navigating history
-    // Handle up and down arrow keys for navigating history
- 
-    // Handle up and down arrow keys for navigating history
-if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_Down) {
-    GtkTextIter start, end;
-    GtkTextBuffer *text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
-    gtk_text_buffer_get_end_iter(text_buffer, &end);
-    gtk_text_buffer_get_iter_at_line_offset(text_buffer, &start, gtk_text_iter_get_line(&end), 0);
+    if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_Down) {
+        GtkTextIter start, end;
+        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
+        gtk_text_buffer_get_end_iter(text_buffer, &end);
+        gtk_text_buffer_get_iter_at_line_offset(text_buffer, &start, gtk_text_iter_get_line(&end), 0);
 
-    std::string command;
+        std::string command;
 
-    // Fetch the command from history
-    if (event->keyval == GDK_KEY_Up) {
-        command = commandHistory.getPreviousCommand();
-    } else if (event->keyval == GDK_KEY_Down) {
-        command = commandHistory.getNextCommand();
+        // Fetch the command from history
+        if (event->keyval == GDK_KEY_Up) {
+            command = commandHistory.getPreviousCommand();
+        } else if (event->keyval == GDK_KEY_Down) {
+            command = commandHistory.getNextCommand();
+        }
+
+        // If a valid command is found, update the input buffer with it
+        if (!command.empty()) {
+            // Clear the current line input
+            gtk_text_buffer_delete(text_buffer, &start, &end);
+            
+            // Insert the command from history
+            gtk_text_buffer_insert(text_buffer, &end, command.c_str(), -1);
+            
+            // Move the cursor to the end of the inserted command
+            gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(text_view), &end, 0.0, TRUE, 0.0, 0.0);
+        }
+
+        return TRUE; // Event handled, no further processing required
     }
-
-    // If a valid command is found, update the input buffer with it
-    if (!command.empty()) {
-        // Clear the current line input
-        gtk_text_buffer_delete(text_buffer, &start, &end);
-        
-        // Insert the command from history
-        gtk_text_buffer_insert(text_buffer, &end, command.c_str(), -1);
-        
-        // Move the cursor to the end of the inserted command
-        gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(text_view), &end, 0.0, TRUE, 0.0, 0.0);
-    }
-
-    return TRUE; // Event handled, no further processing required
-}
 
     return FALSE;
 }
@@ -165,9 +158,9 @@ void activate(GtkApplication *app, gpointer user_data) {
 
     initialize_text_tags();
 
+    // Initial prompt setup
     append_output("Welcome to BroBash (Bhai Lang Terminal)!", output_tag);
     append_output("Type your commands below and press Enter:", output_tag);
-
     append_output(getPrompt().c_str(), prompt_tag);
 
     g_signal_connect(text_view, "key-press-event", G_CALLBACK(on_key_press), NULL);

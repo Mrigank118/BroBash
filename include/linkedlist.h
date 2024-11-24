@@ -1,3 +1,5 @@
+// linkedlist.h
+
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
@@ -25,6 +27,9 @@ public:
 
     // Get the next command in the list
     std::string getNextCommand();
+
+    // Return a string containing the history of commands
+    std::string itihas(); // Corrected return type
 
 private:
     Node* head;   // Head pointer (first node)

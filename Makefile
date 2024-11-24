@@ -6,7 +6,7 @@ SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
 
-SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/commands.cpp $(SRC_DIR)/gui.cpp $(SRC_DIR)/linkedlist.cpp
+SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/commands.cpp $(SRC_DIR)/gui.cpp $(SRC_DIR)/linkedlist.cpp $(SRC_DIR)/hashtable.cpp $(SRC_DIR)/datastructure.cpp
 TARGET = $(BUILD_DIR)/BroBash
 
 all: build_dir $(TARGET)

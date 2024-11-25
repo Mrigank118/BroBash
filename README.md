@@ -51,11 +51,11 @@ The BroBash terminal is a command-line interface (CLI) that functions similarly 
 - **Dependencies**: `libgtk-3-dev`, `g++`, `make/CMake`
 
 ### Installation Steps:
-1. Clone the repository:
+1: Fork the Repository
+2. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/brobash.git
    cd brobash
-
 
 ### Screenshot: 
 ![Terminal Image](/images/terminal.png)

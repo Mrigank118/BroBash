@@ -42,8 +42,6 @@ The BroBash terminal is a command-line interface (CLI) that functions similarly 
 - **HashTable**: Stores file metadata and tracks command usage.
 - **DirectoryTree**: Manages the directory structure and implements methods for navigation and file operations.
 
-## Installation
-
 ### Prerequisites:
 - **Operating System**: Linux-based (Ubuntu recommended)
 - **Language**: C++
@@ -51,11 +49,13 @@ The BroBash terminal is a command-line interface (CLI) that functions similarly 
 - **Dependencies**: `libgtk-3-dev`, `g++`, `make/CMake`
 
 ### Installation Steps:
-1: Fork the Repository
+1. Fork the repository
 2. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/brobash.git
    cd brobash
+3. run command 'make'
+4. run command ./build/Brobash
 
 ### Screenshot: 
 ![Terminal Image](/images/terminal.png)

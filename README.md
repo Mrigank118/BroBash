@@ -35,7 +35,6 @@ BroBash replicates a traditional shell with added custom functionality, focusing
 | `dhoondo <filename> <pattern>` | Search for a specific pattern within a file.         |
 | `itihas`                 | Display command history with usage statistics.            |
 
----
 
 ## Data Structures Used
 

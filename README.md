@@ -2,7 +2,7 @@
 
 **BroBash** is a custom terminal application developed using **C++** and **GTK**, designed to make learning about terminal systems and data structures both educational and engaging. With its playful command language and innovative features, BroBash offers a unique environment for managing files, directories, and processes.
 
----
+
 
 ## Project Overview
 
@@ -16,7 +16,7 @@ BroBash replicates a traditional shell with added custom functionality, focusing
 - **Process Management**: Simulates basic operating system functionalities like process scheduling and file handling.
 - **Command History**: Tracks and navigates through previously executed commands.
 
----
+
 
 ## Commands List
 
@@ -45,7 +45,7 @@ BroBash replicates a traditional shell with added custom functionality, focusing
 - **Stack**: Implements directory navigation and supports the `khojo` command.
 - **Queue**: Handles sequential file operations.
 
----
+
 
 ## Code Structure
 
@@ -53,7 +53,7 @@ BroBash replicates a traditional shell with added custom functionality, focusing
 - **HashTable**: Stores file metadata and tracks command usage.
 - **DirectoryTree**: Manages the directory structure and supports file operations.
 
----
+
 
 ## Prerequisites
 
@@ -62,7 +62,7 @@ BroBash replicates a traditional shell with added custom functionality, focusing
 - **Libraries**: GTK 3/4, Standard C++ Library
 - **Dependencies**: `libgtk-3-dev`, `g++`, `make/CMake`
 
----
+
 
 ## Installation Steps
 
@@ -73,6 +73,7 @@ BroBash replicates a traditional shell with added custom functionality, focusing
    cd brobash
 3. run command 'make'
 4. run command ./build/Brobash
+
 
 ### Screenshot: 
 ![Terminal Image](/images/terminal.png)

@@ -23,7 +23,6 @@ DirectoryTree::DirectoryTree() {
         currentPath = "/";
     }
 }
-
 std::string DirectoryTree::khojo(const std::string& target) {
     std::stack<TreeNode*> stack;
     stack.push(root);
@@ -32,21 +31,30 @@ std::string DirectoryTree::khojo(const std::string& target) {
         TreeNode* node = stack.top();
         stack.pop();
 
+        // Check if the current node matches the target
         if (node->name == target) {
-            std::string path = "";
+            // Build the full path
+            std::string path;
             TreeNode* temp = node;
-            while (temp != nullptr) {
+
+            while (temp != nullptr && temp != root) {
                 path = "/" + temp->name + path;
                 temp = temp->parent;
             }
-            return "Bhai! Mil gaya: " + path;
+
+            // Prepend the current path
+            std::string fullPath = getCurrentPath() + path;
+
+            return "Bhai! Mil gaya: " + fullPath;
         }
 
+        // Push all child nodes onto the stack
         for (const auto& [childName, childNode] : node->children) {
             stack.push(childNode);
         }
     }
 
+    // If the target is not found
     return "Bhai! Yeh nahi mila: " + target;
 }
 

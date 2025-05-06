@@ -3,14 +3,14 @@
 
 #include <string>
 #include <map>
-
+using namespace std;
 struct TreeNode {
-    std::string name;  
+      string name;  
     TreeNode* parent;  
-    std::map<std::string, TreeNode*> children;  
+      map<  string, TreeNode*> children;  
 
     
-    TreeNode(const std::string& name, TreeNode* parent = nullptr) : name(name), parent(parent) {}
+    TreeNode(const   string& name, TreeNode* parent = nullptr) : name(name), parent(parent) {}
 };
 
 
@@ -18,17 +18,17 @@ class DirectoryTree {
 public:
     TreeNode* root;  
     TreeNode* current;  
-    std::string currentPath;  
+      string currentPath;  
     DirectoryTree();
 
     
-    std::string jaha();  
-    std::string chalo(const std::string& dirName);  
-    std::string wapas();  
-    std::string dikhao();  
-    std::string banaoDir(const std::string& dirName); 
-    std::string khojo(const std::string& fileName); 
-    std::string getCurrentPath(); 
+      string jaha();  
+      string chalo(const   string& dirName);  
+      string wapas();  
+      string dikhao();  
+      string banaoDir(const   string& dirName); 
+      string khojo(const   string& fileName); 
+      string getCurrentPath(); 
 
    
     ~DirectoryTree();
@@ -36,7 +36,7 @@ public:
 private:
     
     void deleteTree(TreeNode* node);  
-    void populateTree(TreeNode* node, const std::string& path);  
+    void populateTree(TreeNode* node, const   string& path);  
 };
 
 #endif

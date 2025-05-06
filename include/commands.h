@@ -5,14 +5,14 @@
 
 #include <string>
 #include "hashtable.h"  
-
+using namespace std;
 extern HashTable metadataTable;  
-std::string banaoCommand(const std::string& fileName);
-std::string dikhaoCommand();
-std::string mitaoCommand(const std::string& fileName);
+ string banaoCommand(const  string& fileName);
+ string dikhaoCommand();
+ string mitaoCommand(const  string& fileName);
 
-std::string parseBhaiLang(const std::string& input);
-std::string trim(const std::string& str);  
-std::string getPrompt();
+ string parseBhaiLang(const  string& input);
+ string trim(const  string& str);  
+ string getPrompt();
 
 #endif

@@ -24,6 +24,24 @@ string trim(const string& str) {
     return str.substr(first, (last - first + 1));
 }
 
+int levenshteinDistance(const string &s1, const string &s2) {
+    int len1 = s1.size(), len2 = s2.size();
+    vector<vector<int>> dp(len1 + 1, vector<int>(len2 + 1, 0));
+
+    for (int i = 0; i <= len1; i++) dp[i][0] = i;
+    for (int j = 0; j <= len2; j++) dp[0][j] = j;
+
+    for (int i = 1; i <= len1; i++) {
+        for (int j = 1; j <= len2; j++) {
+            if (s1[i - 1] == s2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1];
+            } else {
+                dp[i][j] = 1 + min({dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]});
+            }
+        }
+    }
+    return dp[len1][len2];
+}
 string banaoCommand(const string& fileName) {
     ofstream file(fileName);
     if (file) {
@@ -42,7 +60,6 @@ string banaoCommand(const string& fileName) {
     }
     return "Bhai! Kuch gadbad hai!";
 }
-
 string dikhaoCommand() {
     string output = "Bhai! Files ka list dikhao...\n";
     for (const auto& [name, node] : directoryTree.current->children) {
@@ -60,11 +77,61 @@ string mitaoCommand(const string& fileName) {
     }
 }
 
+// Boyer-Moore Preprocessing for Bad Character Heuristic
+vector<int> preprocessBadChar(const string &pattern) {
+    vector<int> badChar(256, -1);
+    for (int i = 0; i < pattern.size(); i++)
+        badChar[pattern[i]] = i;
+    return badChar;
+}
+
+// Boyer-Moore Pattern Matching Algorithm
+vector<int> boyerMooreSearch(const string &text, const string &pattern) {
+    int m = pattern.size();
+    int n = text.size();
+    vector<int> badChar = preprocessBadChar(pattern);
+    vector<int> result;
+
+    int shift = 0;
+    while (shift <= (n - m)) {
+        int j = m - 1;
+
+        while (j >= 0 && pattern[j] == text[shift + j])
+            j--;
+
+        if (j < 0) {
+            result.push_back(shift);
+            shift += (shift + m < n) ? m - badChar[text[shift + m]] : 1;
+        } else {
+            shift += max(1, j - badChar[text[shift + j]]);
+        }
+    }
+    return result;
+}
+
+// Updated dhoondoCommand with Boyer-Moore
 string dhoondoCommand(const string& fileName, const string& pattern) {
-    vector<pair<int, int>> occurrences = metadataTable.searchPattern(fileName, pattern);
+    ifstream file(fileName);
+    if (!file) {
+        return "Bhai! File '" + fileName + "' nahi mil rahi.";
+    }
+
+    string line;
+    int lineNum = 0;
+    vector<pair<int, int>> occurrences;
+
+    while (getline(file, line)) {
+        lineNum++;
+        vector<int> matches = boyerMooreSearch(line, pattern);
+        for (int pos : matches) {
+            occurrences.push_back({lineNum, pos});
+        }
+    }
+
     if (occurrences.empty()) {
         return "Bhai! Pattern '" + pattern + "' file '" + fileName + "' mein nahi mila.";
     }
+
     string output = "Bhai! Pattern '" + pattern + "' mila:\n";
     for (const auto& occurrence : occurrences) {
         output += "Line " + to_string(occurrence.first) + ", Position " + to_string(occurrence.second) + "\n";
@@ -113,6 +180,30 @@ string parseBhaiLang(const string& input) {
     commandHistory.addCommand(input);
     metadataTable.incrementCommandCount(command);
 
+    // ✅ List of valid commands
+    vector<string> validCommands = {"banao", "dikhao", "mitao", "jaane", "padh", "likh",
+                                    "chalo", "wapas", "itihas", "dhoondo", "khojo",
+                                    "banaoDir", "jaha", "bye"};
+
+    // ✅ Check if command is valid
+    if (find(validCommands.begin(), validCommands.end(), command) == validCommands.end()) {
+        // ✅ Find closest match using Levenshtein Distance
+        string closestMatch = "";
+        int minDistance = INT_MAX;
+
+        for (const string &validCommand : validCommands) {
+            int distance = levenshteinDistance(command, validCommand);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestMatch = validCommand;
+            }
+        }
+
+        // ✅ Suggest the closest valid command
+        return "Bhai! Yeh command nahi samjha: " + command + "\nKya tum '" + closestMatch + "' likhna chahte the?";
+    }
+
+    // ✅ If command is valid, execute normally
     if (command == "banao") {
         output = banaoCommand(arg);
     } else if (command == "dikhao") {
@@ -154,9 +245,7 @@ string parseBhaiLang(const string& input) {
     } else if (command == "jaha") {
         output = directoryTree.jaha();
     } else if (command == "bye") {
-        exit(0); // Exit the program
-    } else {
-        output = "Bhai! Yeh command nahi samjha: " + command;
+        exit(0);
     }
 
     return output;
